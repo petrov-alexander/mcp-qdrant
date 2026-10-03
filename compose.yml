@@ -1,0 +1,28 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-vector-db
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./.qdrant_data:/qdrant/storage
+
+  qdrant-mcp:
+    build: ./mcp-server-qdrant
+    container_name: qdrant-mcp-server
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - COLLECTION_NAME=universal_codebase_multilingual
+      - EMBEDDING_PROVIDER=fastembed
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+      - HF_ENDPOINT=https://hf-mirror.com
+      - FASTMCP_TRANSPORT=sse
+      - FASTMCP_SERVER_HOST=0.0.0.0
+      - FASTMCP_SERVER_PORT=8000
+    volumes:
+      - ./.hf_cache:/root/.cache/huggingface
+      - ./.fastembed_cache:/root/.cache/fastembed
+    ports:
+      - "8000:8000"
+    depends_on:
+      - qdrant
