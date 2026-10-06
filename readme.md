@@ -12,6 +12,9 @@ docker compose --env-file .index.env up -d
 ```bash
 claude mcp add --transport sse qdrant http://localhost:8000/sse
 ```
+```bash
+opencode mcp add qdrant --url http://localhost:8000/sse
+```
 ### Создание индекса
 Запусти claude и отправь команду:
 ```text
@@ -20,7 +23,7 @@ claude mcp add --transport sse qdrant http://localhost:8000/sse
 ## Поиск
 ### Остановка docker
 ```bash
-docker compose --env-file .env.index down
+docker compose --env-file .index.env down
 ```
 ### Запуск docker для поиска
 ```bash
